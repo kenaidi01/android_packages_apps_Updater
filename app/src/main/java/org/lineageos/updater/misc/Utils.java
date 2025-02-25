@@ -85,17 +85,9 @@ public class Utils {
     }
 
     public static boolean isCompatible(UpdateBaseInfo update) {
-        if (update.getVersion().compareTo(SystemProperties.get(Constants.PROP_BUILD_VERSION)) < 0) {
-            Log.d(TAG, update.getName() + " is older than current Android version");
-            return false;
-        }
-        if (!SystemProperties.getBoolean(Constants.PROP_UPDATER_ALLOW_DOWNGRADING, false) &&
-                update.getTimestamp() <= SystemProperties.getLong(Constants.PROP_BUILD_DATE, 0)) {
-            Log.d(TAG, update.getName() + " is older than/equal to the current build");
-            return false;
-        }
-        if (!update.getType().equalsIgnoreCase(SystemProperties.get(Constants.PROP_RELEASE_TYPE))) {
-            Log.d(TAG, update.getName() + " has type " + update.getType());
+        String currentVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION);
+        if (update.getVersion().equalsIgnoreCase(currentVersion)) {
+            Log.d(TAG, update.getName() + " has the same firmware version");
             return false;
         }
         return true;
