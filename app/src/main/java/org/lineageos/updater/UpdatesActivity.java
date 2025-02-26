@@ -75,6 +75,8 @@ import org.lineageos.updater.misc.StringGenerator;
 import org.lineageos.updater.misc.Utils;
 import org.lineageos.updater.model.Update;
 import org.lineageos.updater.model.UpdateInfo;
+import org.lineageos.updater.RandomImageView;
+import org.lineageos.updater.RandomTextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -168,7 +170,8 @@ public class UpdatesActivity extends UpdatesListActivity implements UpdateImport
 
         findViewById(R.id.refresh).setOnClickListener(v -> downloadUpdatesList(true));
         findViewById(R.id.preferences).setOnClickListener(v -> showPreferencesDialog());
-        
+        findViewById(R.id.import_local).setOnClickListener(v -> mUpdateImporter.openImportPicker());
+        findViewById(R.id.changelog).setOnClickListener(v -> openChangelog());
         maybeShowWelcomeMessage();
     }
 
@@ -223,15 +226,21 @@ public class UpdatesActivity extends UpdatesListActivity implements UpdateImport
             showPreferencesDialog();
             return true;
         } else if (itemId == R.id.menu_show_changelog) {
-            Intent openUrl = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(Utils.getChangelogURL(this)));
-            startActivity(openUrl);
+            openChangelog();
             return true;
         } else if (itemId == R.id.menu_local_update) {
             mUpdateImporter.openImportPicker();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    private void openChangelog() {
+        try {
+            Intent openUrl = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(Utils.getChangelogURL(this)));
+            startActivity(openUrl);
+        } catch (Exception e) {}
     }
 
     @Override
@@ -434,6 +443,10 @@ public class UpdatesActivity extends UpdatesListActivity implements UpdateImport
 
         refreshAnimationStart();
         downloadClient.start();
+        RandomImageView randomImageView = findViewById(R.id.no_updates_image);
+        randomImageView.randomizeImage();
+        RandomTextView randomTextView = findViewById(R.id.random_text);
+        randomTextView.randomizeMessage();
     }
 
     private void updateLastCheckedString() {
