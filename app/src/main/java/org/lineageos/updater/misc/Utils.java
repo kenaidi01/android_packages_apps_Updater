@@ -165,10 +165,10 @@ public class Utils {
         String incrementalVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION_INCREMENTAL);
         String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
                 SystemProperties.get(Constants.PROP_DEVICE));
-        String buildVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION, "");
+        String buildDisplayVersion = SystemProperties.get(Constants.PROP_DISPLAY_VERSION, "");
         String variant;
 
-        if (buildVersion.toLowerCase().contains("vanilla")) {
+        if (buildDisplayVersion.toLowerCase().contains("vanilla")) {
             variant = "VANILLA";
         } else {
             variant = "GMS";
