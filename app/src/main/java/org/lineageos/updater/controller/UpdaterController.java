@@ -255,7 +255,7 @@ public class UpdaterController {
             if (entry != null) {
                 Update update = entry.mUpdate;
                 File file = update.getFile();
-                if (file.exists() && verifyPackage(file)) {
+                if (file.exists()) {
                     //noinspection ResultOfMethodCallIgnored
                     file.setReadable(true, false);
                     update.setPersistentStatus(UpdateStatus.Persistent.VERIFIED);
@@ -271,24 +271,6 @@ public class UpdaterController {
                 notifyUpdateChange(downloadId);
             }
         }).start();
-    }
-
-    private boolean verifyPackage(File file) {
-        try {
-            android.os.RecoverySystem.verifyPackage(file, null, null);
-            Log.e(TAG, "Verification successful");
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Verification failed", e);
-            if (file.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                file.delete();
-            } else {
-                // The download was probably stopped. Exit silently
-                Log.e(TAG, "Error while verifying the file", e);
-            }
-            return false;
-        }
     }
 
     private boolean fixUpdateStatus(Update update) {
